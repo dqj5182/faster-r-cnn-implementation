@@ -10,6 +10,7 @@ from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
 
 from dataset.load_penn_fudan import PennFudanDataset
 from model.mask_r_cnn import get_model_instance_segmentation
+from utils.utils import get_transform
 
 
 # load a model pre-trained on COCO
@@ -56,23 +57,14 @@ model = FasterRCNN(backbone,
                    num_classes=2,
                    rpn_anchor_generator=anchor_generator,
                    box_roi_pool=roi_pooler)
-  
-  
-import transforms as T
-
-def get_transform(train):
-    transforms = []
-    transforms.append(T.ToTensor())
-    if train:
-        transforms.append(T.RandomHorizontalFlip(0.5))
-    return T.Compose(transforms)
 
   
 model = torchvision.models.detection.fasterrcnn_resnet50_fpn(pretrained=True)
 dataset = PennFudanDataset('PennFudanPed', get_transform(train=True))
 data_loader = torch.utils.data.DataLoader(
- dataset, batch_size=2, shuffle=True, num_workers=4,
- collate_fn=utils.collate_fn)
+  dataset, batch_size=2, shuffle=True, num_workers=4,
+  collate_fn=utils.collate_fn)
+
 # For Training
 images,targets = next(iter(data_loader))
 images = list(image for image in images)
@@ -139,8 +131,3 @@ def main():
         evaluate(model, data_loader_test, device=device)
 
     print("That's it!")
-    
-    
-    
-    
-    
