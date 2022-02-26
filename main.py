@@ -72,7 +72,7 @@ class PennFudanDataset(torch.utils.data.Dataset):
         return len(self.imgs)
       
       
-  import torchvision
+import torchvision
 from torchvision.models.detection.faster_rcnn import FastRCNNPredictor
 
 # load a model pre-trained on COCO
